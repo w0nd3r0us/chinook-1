@@ -1,6 +1,24 @@
 class Track < ApplicationRecord
   # scope :short, -> { self.length_less_than_or_equal(180000) }
 
+  validates :composer, :rating, presence: true
+  validates :name, length: { minimum: 3 }
+  validate :name_has_capital_first_letter
+
+
+  def name_has_capital_first_letter
+    # get first letter
+    first_letter = self.name[0]
+
+    # check if first letter is capital
+    unless first_letter == first_letter.upcase # is uppercase
+      # if not, add error
+      self.errors.add(:name, 'must start with a capital letter.')
+    end
+
+  end
+
+
   def self.short
     return self.length_less_than_or_equal(180000)
   end
